@@ -3,7 +3,8 @@
 
 @interface APTLinkController : NSObject
 
-- (instancetype)initWithNavigationController:(UINavigationController *)navigationController;
+- (instancetype)initWithViewController:(UIViewController *)viewController;
 - (void)showLink:(NSString *)urlString;
+- (void)remove;
 
 @end

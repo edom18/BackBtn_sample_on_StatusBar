@@ -38,6 +38,8 @@
 {
     [super viewDidLoad];
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(50, 150, 100, 100)];
     [button addTarget:self action:@selector(tap:) forControlEvents:UIControlEventTouchUpInside];
     button.backgroundColor = UIColor.grayColor;

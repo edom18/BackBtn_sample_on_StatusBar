@@ -18,12 +18,34 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    UIViewController *vc = [[APTViewController alloc] init];
-    vc.view.backgroundColor = UIColor.redColor;
-    UINavigationController *uvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    uvc.view.backgroundColor = UIColor.greenColor;
-    vc.navigationItem.title = @"AppLink test";
-    self.window.rootViewController = uvc;
+    UIViewController *vc1 = [[APTViewController alloc] init];
+    UINavigationController *uvc1 = [[UINavigationController alloc] initWithRootViewController:vc1];
+    
+    UIViewController *vc2 = [[APTViewController alloc] init];
+    UINavigationController *uvc2 = [[UINavigationController alloc] initWithRootViewController:vc2];
+    
+    NSArray *viewControllers = @[uvc1, uvc2];
+    UITabBarController *tbc = [[UITabBarController alloc] init];
+    [tbc setViewControllers:viewControllers];
+    
+    vc1.navigationItem.title = @"AppLink test1";
+    vc2.navigationItem.title = @"AppLink test2";
+    
+    UIColor *barColor = [UIColor colorWithRed:255.0/255.0 green:102.0/255.0 blue:52.0/255.0 alpha:1.0];
+    
+    vc1.navigationController.navigationBar.barTintColor = barColor;
+    vc1.navigationController.navigationBar.tintColor    = UIColor.whiteColor;
+    vc1.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.whiteColor};
+    
+    vc2.navigationController.navigationBar.barTintColor = barColor;
+    vc2.navigationController.navigationBar.tintColor    = UIColor.whiteColor;
+    vc2.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.whiteColor};
+    
+    UITabBarItem *tbi1 = tbc.tabBar.items[0];
+    tbi1.title = @"Tab1";
+    UITabBarItem *tbi2 = tbc.tabBar.items[1];
+    tbi2.title = @"Tab2";
+    self.window.rootViewController = tbc;
     
     [self.window makeKeyAndVisible];
     return YES;
@@ -51,7 +73,9 @@
         }
         
         if (shouldShowBtn) {
-            self.linkController = [[APTLinkController alloc] initWithNavigationController:(UINavigationController *)self.window.rootViewController];
+            UITabBarController *tbc = (UITabBarController *)self.window.rootViewController;
+            [self.linkController remove];
+            self.linkController = [[APTLinkController alloc] initWithViewController:tbc];
             [self.linkController showLink:dict[@"backScheme"]];
         }
     }

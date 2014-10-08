@@ -2,7 +2,8 @@
 #import <UIKit/UIKit.h>
 
 @protocol APTTopViewDelegate <NSObject>
-- (void)tap;
+- (void)open;
+- (void)close;
 @end
 
 @interface APTTopView : UIView
