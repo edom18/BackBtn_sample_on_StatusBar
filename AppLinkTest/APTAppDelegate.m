@@ -5,17 +5,16 @@
 #import "APTLinkController.h"
 
 @interface APTAppDelegate ()
-
 @property (nonatomic, strong) APTLinkController *linkController;
-
 @end
+
 
 @implementation APTAppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(UIApplication *)application
+didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     
     UIViewController *vc1 = [[APTViewController alloc] init];
@@ -28,7 +27,6 @@
     UITabBarController *tbc = [[UITabBarController alloc] init];
     [tbc setViewControllers:viewControllers];
     
-//    vc1.navigationItem.title = @"AppLink test1";
     vc2.navigationItem.title = @"AppLink test2";
     
     UIColor *barColor = [UIColor colorWithRed:255.0/255.0 green:102.0/255.0 blue:52.0/255.0 alpha:1.0];

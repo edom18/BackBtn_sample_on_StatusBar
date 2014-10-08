@@ -1,9 +1,7 @@
 
 #import "APTTopView.h"
 
-static const CGFloat APTCloseButtonWidth  = 12.0;
-static const CGFloat APTCloseButtonHeight = 12.0;
-
+// ボタンのヒットエリアを拡張
 @implementation UIButton (ExpandHitArea)
 
 - (BOOL)pointInside:(CGPoint)point
@@ -13,19 +11,22 @@ static const CGFloat APTCloseButtonHeight = 12.0;
     static const CGFloat insetRight  = 100.0;
     static const CGFloat insetTop    = 100.0;
     static const CGFloat insetBottom = 100.0;
-    
+
     CGRect checkArea = self.bounds;
-    
+
     checkArea.origin.x -= insetLeft;
     checkArea.origin.y -= insetTop;
     checkArea.size.width  += (insetLeft + insetRight);
     checkArea.size.height += (insetTop + insetBottom);
-    
+
     BOOL isHit = CGRectContainsPoint(checkArea, point);
     return isHit;
 }
-    
+
 @end
+
+static const CGFloat APTCloseButtonWidth  = 12.0;
+static const CGFloat APTCloseButtonHeight = 12.0;
 
 @interface APTTopView ()
 
@@ -91,18 +92,14 @@ static const CGFloat APTCloseButtonHeight = 12.0;
     if (!self.labelView && !self.closeButton) {
         CGRect labelFrame = CGRectMake(0, 7, self.bounds.size.width, 44);
         self.labelView = [[UILabel alloc] initWithFrame:labelFrame];
-        self.labelView.font = [UIFont boldSystemFontOfSize:UIFont.smallSystemFontSize];
+        self.labelView.font = [UIFont systemFontOfSize:UIFont.smallSystemFontSize];
         self.labelView.textColor = UIColor.whiteColor;
         
         if (!self.title) {
-            self.labelView.text = @"タップしてゲームにもどる";
+            self.labelView.text = @"タップしてもどる";
         }
         self.labelView.backgroundColor = UIColor.clearColor;
-#ifdef __IPHONE_6_0
         self.labelView.textAlignment = NSTextAlignmentCenter;
-#else
-        self.labelView.textAlignment = UITextAlignmentCenter;
-#endif
         self.labelView.clipsToBounds          = YES;
         self.labelView.userInteractionEnabled = YES;
         self.labelView.autoresizingMask       = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
