@@ -59,8 +59,8 @@ UITabBarControllerDelegate
         
         if ([self.viewController isKindOfClass:UITabBarController.class]) {
             UITabBarController *tbc = (UITabBarController *)self.viewController;
-            if ([tbc.viewControllers.firstObject isKindOfClass:UINavigationController.class]) {
-                UINavigationController *uvc = (UINavigationController *)tbc.viewControllers.firstObject;
+            if ([tbc.selectedViewController isKindOfClass:UINavigationController.class]) {
+                UINavigationController *uvc = (UINavigationController *)tbc.selectedViewController;
                 UINavigationBar *navigationBar   = uvc.navigationBar;
                 
                 CGFloat statusHeight = MIN(UIApplication.sharedApplication.statusBarFrame.size.width,
@@ -68,6 +68,7 @@ UITabBarControllerDelegate
                 
                 // TODO: navigationBar配下のUINavigationItemViewの位置が自動的にずれるために、
                 //       アニメーションさせるとラベルだけずれたように見えてしまう現象への対処。
+                //       iOS8以降、場合によってはなにがしか対応が必要になるかも。
                 UIView *navigationItemView = (UIView *)navigationBar.subviews[1];
                 CGRect newItemFrame    = navigationItemView.frame;
                 newItemFrame.origin.y += statusHeight;
