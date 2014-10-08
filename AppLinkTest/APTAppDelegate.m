@@ -28,7 +28,7 @@
     UITabBarController *tbc = [[UITabBarController alloc] init];
     [tbc setViewControllers:viewControllers];
     
-    vc1.navigationItem.title = @"AppLink test1";
+//    vc1.navigationItem.title = @"AppLink test1";
     vc2.navigationItem.title = @"AppLink test2";
     
     UIColor *barColor = [UIColor colorWithRed:255.0/255.0 green:102.0/255.0 blue:52.0/255.0 alpha:1.0];
@@ -36,6 +36,11 @@
     vc1.navigationController.navigationBar.barTintColor = barColor;
     vc1.navigationController.navigationBar.tintColor    = UIColor.whiteColor;
     vc1.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: UIColor.whiteColor};
+    
+    vc1.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCamera target:nil action:nil];
+    vc1.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
+    vc1.navigationItem.titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 44)];
+    vc1.navigationItem.titleView.backgroundColor = UIColor.blueColor;
     
     vc2.navigationController.navigationBar.barTintColor = barColor;
     vc2.navigationController.navigationBar.tintColor    = UIColor.whiteColor;

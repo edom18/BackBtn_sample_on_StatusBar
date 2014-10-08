@@ -69,9 +69,16 @@ UITabBarControllerDelegate
                 // TODO: navigationBar配下のUINavigationItemViewの位置が自動的にずれるために、
                 //       アニメーションさせるとラベルだけずれたように見えてしまう現象への対処。
                 //       iOS8以降、場合によってはなにがしか対応が必要になるかも。
-                UIView *navigationItemView = (UIView *)navigationBar.subviews[1];
-                CGRect newItemFrame    = navigationItemView.frame;
-                newItemFrame.origin.y += statusHeight;
+                for (UIView *view in navigationBar.subviews) {
+                    NSString *className = NSStringFromClass(view.class);
+                    BOOL likeNavItemView = ![className isEqualToString:@"_UINavigationBarBackground"];
+                    if (likeNavItemView) {
+                        UIView *navItemView = view;
+                        CGRect newItemFrame    = navItemView.frame;
+                        newItemFrame.origin.y += statusHeight;
+                        navItemView.frame = newItemFrame;
+                    }
+                }
                 
                 CGRect newFrame = CGRectMake(0,
                                              0,
@@ -79,8 +86,7 @@ UITabBarControllerDelegate
                                              navigationBar.frame.size.height + statusHeight);
                 
                 // ナビゲーションバーとナビゲーションアイテムビューそれぞれにリサイズ後の位置を設定
-                navigationBar.frame      = newFrame;
-                navigationItemView.frame = newItemFrame;
+                navigationBar.frame = newFrame;
             }
         }
         
@@ -100,9 +106,8 @@ UITabBarControllerDelegate
  */
 - (void)open
 {
-    [self closeAnimation:^(BOOL finished) {
-        [UIApplication.sharedApplication openURL:self.backURL];
-    }];
+    [self closeAnimation:nil];
+    [UIApplication.sharedApplication openURL:self.backURL];
 }
 
 /**
