@@ -19,6 +19,13 @@ UITabBarControllerDelegate
 
 @implementation APTLinkController
 
+/**
+ *  指定イニシャライザ
+ *
+ *  @param viewController 操作対象のビューコントローラ
+ *
+ *  @return インスタンス
+ */
 - (instancetype)initWithViewController:(UIViewController *)viewController
 {
     self = [super init];
@@ -31,6 +38,11 @@ UITabBarControllerDelegate
     return self;
 }
 
+/**
+ *  終了時のアニメーション
+ *
+ *  @param completion 完了後のコールバック
+ */
 - (void)closeAnimation:(void (^)(BOOL))completion
 {
     UIView *mainView = self.viewController.view;
@@ -39,22 +51,35 @@ UITabBarControllerDelegate
                               mainView.frame.size.width,
                               mainView.frame.size.height + APTTopViewHeight);
     
-    [UIView animateWithDuration:0.5f animations:^{
+    CGFloat duration = 0.5;
+    [UIView animateWithDuration:duration animations:^{
+        
+        // TopViewを非表示に
         self.topview.frame = CGRectMake(0, 0, mainView.bounds.size.width, 0);
         
         if ([self.viewController isKindOfClass:UITabBarController.class]) {
             UITabBarController *tbc = (UITabBarController *)self.viewController;
             if ([tbc.viewControllers.firstObject isKindOfClass:UINavigationController.class]) {
                 UINavigationController *uvc = (UINavigationController *)tbc.viewControllers.firstObject;
-                UINavigationBar *navigationBar = uvc.navigationBar;
+                UINavigationBar *navigationBar   = uvc.navigationBar;
                 
                 CGFloat statusHeight = MIN(UIApplication.sharedApplication.statusBarFrame.size.width,
                                            UIApplication.sharedApplication.statusBarFrame.size.height);
+                
+                // TODO: navigationBar配下のUINavigationItemViewの位置が自動的にずれるために、
+                //       アニメーションさせるとラベルだけずれたように見えてしまう現象への対処。
+                UIView *navigationItemView = (UIView *)navigationBar.subviews[1];
+                CGRect newItemFrame    = navigationItemView.frame;
+                newItemFrame.origin.y += statusHeight;
+                
                 CGRect newFrame = CGRectMake(0,
                                              0,
                                              navigationBar.frame.size.width,
                                              navigationBar.frame.size.height + statusHeight);
-                navigationBar.frame = newFrame;
+                
+                // ナビゲーションバーとナビゲーションアイテムビューそれぞれにリサイズ後の位置を設定
+                navigationBar.frame      = newFrame;
+                navigationItemView.frame = newItemFrame;
             }
         }
         
@@ -63,6 +88,7 @@ UITabBarControllerDelegate
     
     mainView.frame = frame;
     
+    // delegateは一度しか使われない想定なので、nilでリンクを外す。
     if ([self.viewController isKindOfClass:UITabBarController.class]) {
         ((UITabBarController *)self.viewController).delegate = nil;
     }
@@ -78,6 +104,9 @@ UITabBarControllerDelegate
     }];
 }
 
+/**
+ *  終了
+ */
 - (void)close
 {
     [self closeAnimation:nil];
@@ -101,12 +130,20 @@ UITabBarControllerDelegate
     [self reductionView];
 }
 
+/**
+ *  現在表示中か？
+ *
+ *  @return 表示中であればYES
+ */
 - (BOOL)isShowing
 {
     UIView *view = self.viewController.view;
     return view.frame.origin.y > 0;
 }
 
+/**
+ *  ビューの縮小処理
+ */
 - (void)reductionView
 {
     if ([self isShowing]) {
@@ -121,12 +158,17 @@ UITabBarControllerDelegate
     mainView.frame = frame;
 }
 
+#pragma mark - UITabBarControllerDelegate
+
 - (void)tabBarController:(UITabBarController *)tabBarController
  didSelectViewController:(UIViewController *)viewController
 {
     [self reductionView];
 }
 
+/**
+ *  後処理
+ */
 - (void)remove
 {
     [self.topview removeFromSuperview];
